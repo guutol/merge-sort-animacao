@@ -56,14 +56,14 @@ public class Principal extends Application {
         gerarValores();
 
         idxVet = new Button[TL];
-        for (int i = 0; i < TL; i++)
+        for(int i = 0; i < TL; i++)
         {
             idxVet[i] = criarRotulo(String.valueOf(i), xPos(i), Y_VET + 45);
             pane.getChildren().add(idxVet[i]);
         }
         idxVet1 = new Button[TL / 2];
         idxVet2 = new Button[TL / 2];
-        for (int i = 0; i < TL / 2; i++)
+        for(int i = 0; i < TL / 2; i++)
         {
             idxVet1[i] = criarRotulo(String.valueOf(i), xPos(i), Y_SUB + 45);
             idxVet2[i] = criarRotulo(String.valueOf(i), xPos(i + TL / 2) + GAP, Y_SUB + 45);
@@ -85,13 +85,13 @@ public class Principal extends Application {
 
     public void gerarValores()
     {
-        if (vetBotoes != null)
-            for (Button b : vetBotoes)
+        if(vetBotoes != null)
+            for(Button b : vetBotoes)
                 pane.getChildren().remove(b);
 
         v = new Vetor(TL);
         vetBotoes = new Button[TL];
-        for (int i = 0; i < TL; i++)
+        for(int i = 0; i < TL; i++)
         {
             vetBotoes[i] = criarBotao(String.valueOf(v.getValor(i)), xPos(i), Y_VET);
             pane.getChildren().add(vetBotoes[i]);
@@ -138,14 +138,13 @@ public class Principal extends Application {
         });
     }
 
-    //move varios botoes ao mesmo tempo, das posicoes de origem pras posicoes de destino, aos poucos
     public void moverBotoes(Button[] botoes, double[] origX, double[] origY, double[] destX, double[] destY)
     {
         int passos = 20;
-        for (int p = 1; p <= passos; p++)
+        for(int p = 1; p <= passos; p++)
         {
             int passoAtual = p;
-            for (int b = 0; b < botoes.length; b++)
+            for(int b = 0; b < botoes.length; b++)
             {
                 int idx = b;
                 double novoX = origX[idx] + (destX[idx] - origX[idx]) * passoAtual / passos;
@@ -164,8 +163,7 @@ public class Principal extends Application {
         try
         {
             Thread.sleep(ms);
-        } catch (InterruptedException e)
-        { }
+        } catch (InterruptedException e) { }
     }
 
     public void animarMerge()
@@ -174,7 +172,7 @@ public class Principal extends Application {
             @Override
             protected Void call() {
                 int seq = 1;
-                while (seq < v.getTL())
+                while(seq < v.getTL())
                 {
                     int tam = v.getTL() / 2;
                     int[] aux1 = new int[tam];
@@ -182,14 +180,13 @@ public class Principal extends Application {
 
                     v.particao(aux1, aux2);
 
-                    //cria botoes NOVOS (copias) pra vet1/vet2 - o vet de cima nao mexe, continua do jeito que estava
                     Button[] novoVet1 = new Button[tam];
                     Button[] novoVet2 = new Button[tam];
                     double[] origX1 = new double[tam], origY1 = new double[tam];
                     double[] destX1 = new double[tam], destY1 = new double[tam];
                     double[] origX2 = new double[tam], origY2 = new double[tam];
                     double[] destX2 = new double[tam], destY2 = new double[tam];
-                    for (int i = 0; i < tam; i++)
+                    for(int i = 0; i < tam; i++)
                     {
                         novoVet1[i] = criarBotao(String.valueOf(aux1[i]), xPos(i), Y_VET);
                         origX1[i] = xPos(i); origY1[i] = Y_VET;
@@ -205,15 +202,14 @@ public class Principal extends Application {
                     });
                     mostrarRotulos(idxVet1, true);
                     mostrarRotulos(idxVet2, true);
-                    pausar(50); //da tempo dos botoes entrarem na tela antes de comecar a mover
+                    pausar(50);
 
-                    //animacao da particao: as copias descem, lado a lado na mesma fileira - o vet de cima fica intacto
                     Button[] botoesParticao = new Button[v.getTL()];
                     double[] origXP = new double[v.getTL()];
                     double[] origYP = new double[v.getTL()];
                     double[] destXP = new double[v.getTL()];
                     double[] destYP = new double[v.getTL()];
-                    for (int i = 0; i < tam; i++)
+                    for(int i = 0; i < tam; i++)
                     {
                         botoesParticao[i] = novoVet1[i];
                         origXP[i] = origX1[i]; origYP[i] = origY1[i];
@@ -226,12 +222,11 @@ public class Principal extends Application {
                     moverBotoes(botoesParticao, origXP, origYP, destXP, destYP);
                     vet1Botoes = novoVet1;
                     vet2Botoes = novoVet2;
-                    pausar(800); //pausa maior aqui: os 3 vetores (vet, vet1, vet2) ficam visiveis juntos
+                    pausar(800);
 
                     Button[] vetAntigo = vetBotoes;
                     v.fusao(aux1, aux2, seq);
 
-                    //replay da fusao (mesmas comparacoes do Vetor.fusao) so pra decidir pra onde cada botao vai
                     Button[] novoVet = new Button[v.getTL()];
                     double[] origXF = new double[v.getTL()];
                     double[] origYF = new double[v.getTL()];
@@ -240,12 +235,12 @@ public class Principal extends Application {
                     int[] iPasso = new int[v.getTL()];
                     int[] jPasso = new int[v.getTL()];
                     int i = 0, j = 0, k = 0, seqAtual = seq, t_seq = seq;
-                    while (k < v.getTL())
+                    while(k < v.getTL())
                     {
-                        while (i < seqAtual && j < seqAtual)
+                        while(i < seqAtual && j < seqAtual)
                         {
                             iPasso[k] = i; jPasso[k] = j;
-                            if (aux1[i] < aux2[j])
+                            if(aux1[i] < aux2[j])
                             {
                                 novoVet[k] = vet1Botoes[i];
                                 origXF[k] = xPos(i); origYF[k] = Y_SUB;
@@ -258,14 +253,14 @@ public class Principal extends Application {
                             }
                             k++;
                         }
-                        while (i < seqAtual)
+                        while(i < seqAtual)
                         {
                             iPasso[k] = i; jPasso[k] = j;
                             novoVet[k] = vet1Botoes[i];
                             origXF[k] = xPos(i); origYF[k] = Y_SUB;
                             i++; k++;
                         }
-                        while (j < seqAtual)
+                        while(j < seqAtual)
                         {
                             iPasso[k] = i; jPasso[k] = j;
                             novoVet[k] = vet2Botoes[j];
@@ -274,18 +269,16 @@ public class Principal extends Application {
                         }
                         seqAtual += t_seq;
                     }
-                    for (int p = 0; p < v.getTL(); p++)
+                    for(int p = 0; p < v.getTL(); p++)
                     {
                         destXF[p] = xPos(p); destYF[p] = Y_VET;
                     }
 
-                    //tira o vet antigo da tela - ele vai ser substituido pelos botoes que sobem de vet1/vet2
                     Platform.runLater(() -> {
-                        for (Button b : vetAntigo) pane.getChildren().remove(b);
+                        for(Button b : vetAntigo) pane.getChildren().remove(b);
                     });
 
-                    //animacao da fusao: um botao por vez sobe da fileira vet1/vet2 pra posicao nova em vet (na ordem em que o fusao escolhe)
-                    for (int p = 0; p < v.getTL(); p++)
+                    for(int p = 0; p < v.getTL(); p++)
                     {
                         posicionarMarcador(marcI, xPos(iPasso[p]), Y_SUB + 65, iPasso[p] < tam);
                         posicionarMarcador(marcJ, xPos(jPasso[p] + tam) + GAP, Y_SUB + 65, jPasso[p] < tam);
